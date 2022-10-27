@@ -2,6 +2,7 @@ package it.prova.gestioneordiniarticolicategorie.model;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -28,16 +29,16 @@ public class Articolo {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "id")
+	@Column(name = "descrizione")
 	private String descrizione;
 
-	@Column(name = "id")
+	@Column(name = "numeroseriale")
 	private String numeroSeriale;
 
-	@Column(name = "id")
+	@Column(name = "prezzosingolo")
 	private int prezzoSingolo;
 
-	@Column(name = "id")
+	@Column(name = "datainserimento")
 	private Date dataInserimento;
 	
 	@CreationTimestamp
@@ -46,12 +47,12 @@ public class Articolo {
 	private LocalDateTime updateDateTime;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ordine_id")
+	@JoinColumn(name = "ordine_id", nullable = false)
 	private Ordine ordine;
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "articolo_categoria", joinColumns = @JoinColumn(name = "artiolo_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "artiolo_id", referencedColumnName = "ID"))
-	private Set<Categoria> categorie;
+	@JoinTable(name = "articolo_categoria", joinColumns = @JoinColumn(name = "articolo_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "categoria_id", referencedColumnName = "ID"))
+	private Set<Categoria> categorie = new HashSet<>();
 	
 	public Articolo() {
 		

@@ -1,6 +1,7 @@
 package it.prova.gestioneordiniarticolicategorie.model;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -36,7 +37,7 @@ public class Categoria {
 	private LocalDateTime updateDateTime;
 	
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "categorie")
-	private Set<Articolo> articoli;
+	private Set<Articolo> articoli = new HashSet<>();
 	
 	public Categoria() {
 		
