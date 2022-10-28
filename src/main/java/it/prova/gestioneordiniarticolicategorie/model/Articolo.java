@@ -40,7 +40,7 @@ public class Articolo {
 
 	@Column(name = "datainserimento")
 	private Date dataInserimento;
-	
+
 	@CreationTimestamp
 	private LocalDateTime createDateTime;
 	@UpdateTimestamp
@@ -53,9 +53,9 @@ public class Articolo {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "articolo_categoria", joinColumns = @JoinColumn(name = "articolo_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "categoria_id", referencedColumnName = "ID"))
 	private Set<Categoria> categorie = new HashSet<>();
-	
+
 	public Articolo() {
-		
+
 	}
 
 	public Articolo(String descrizione, String numeroSeriale, int prezzoSingolo, Date dataInserimento) {
@@ -137,6 +137,10 @@ public class Articolo {
 	public void setCategorie(Set<Categoria> categorie) {
 		this.categorie = categorie;
 	}
-	
-	
+
+	public void addArticoloToCategoria(Categoria c) {
+		this.categorie.add(c);
+		c.getArticoli().add(this);
+	}
+
 }

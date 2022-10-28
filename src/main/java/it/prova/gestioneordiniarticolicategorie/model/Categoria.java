@@ -97,5 +97,8 @@ public class Categoria {
 		this.articoli = articoli;
 	}
 	
-	
+	public void addCategoriaToArticolo(Articolo a) {
+		this.articoli.add(a);
+		a.getCategorie().add(this);
+	}
 }
