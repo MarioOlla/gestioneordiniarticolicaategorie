@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import it.prova.gestioneordiniarticolicategorie.dao.EntityManagerUtil;
 import it.prova.gestioneordiniarticolicategorie.dao.OrdineDAO;
 import it.prova.gestioneordiniarticolicategorie.exception.ArticoliAncoraPresentiNellOrdineException;
+import it.prova.gestioneordiniarticolicategorie.model.Categoria;
 import it.prova.gestioneordiniarticolicategorie.model.Ordine;
 
 public class OrdineServiceImpl implements OrdineService {
@@ -138,5 +139,33 @@ public class OrdineServiceImpl implements OrdineService {
 			EntityManagerUtil.closeEntityManager(entityManager);
 		}
 	}
+	
+	@Override
+	public List<Ordine> tuttiOrdiniConArticoliDiCategoria(Categoria categoria )throws Exception{
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
 
+		try {
+			ordineDAOInstance.setEntityManager(entityManager);
+			return ordineDAOInstance.getAllOrdiniConArticoliDiCategoria(categoria);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
+	
+	@Override
+	public Ordine ordinePiuRecenteConArticoliDiCategoria(Categoria categoria)throws Exception{
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+		try {
+			ordineDAOInstance.setEntityManager(entityManager);
+			return ordineDAOInstance.findOrdineSpedizionePiuRecenteConArticoliDiCategoria(categoria);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
 }

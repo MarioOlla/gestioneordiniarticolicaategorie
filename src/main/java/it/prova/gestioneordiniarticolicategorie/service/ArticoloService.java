@@ -12,5 +12,7 @@ public interface ArticoloService extends IBaseService<Articolo> {
 
 	public void aggiungiArticoloACategoria(Articolo articoloDaLinkare, Categoria categoriaDaLinkare)throws Exception;
 
-	void rimuoviCategorieDaArticolo(Articolo articolo) throws Exception;
+	public void rimuoviCategorieDaArticolo(Articolo articolo) throws Exception;
+
+	public Long sommaPrezzoArticoliDiCategoria(Categoria categoria) throws Exception;
 }

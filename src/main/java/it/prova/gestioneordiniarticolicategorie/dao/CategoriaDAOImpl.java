@@ -1,11 +1,11 @@
 package it.prova.gestioneordiniarticolicategorie.dao;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
 
 import it.prova.gestioneordiniarticolicategorie.model.Articolo;
 import it.prova.gestioneordiniarticolicategorie.model.Categoria;
+import it.prova.gestioneordiniarticolicategorie.model.Ordine;
 
 public class CategoriaDAOImpl implements CategoriaDAO {
 
@@ -74,5 +74,13 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 		entityManager.createNativeQuery("delete from articolo_categoria where categoria_id=?1")
 				.setParameter(1, o.getId()).executeUpdate();
 
+	}
+	
+	@Override
+	public List<Categoria> allCategorieInOrdine(Ordine ordine) throws Exception{
+		if(ordine == null || ordine.getId() == null || ordine .getId() < 1)
+			throw new Exception("Impossibile effettuare ricerca, input non valido.");
+		
+		return entityManager.createQuery("select distinct c from Categoria c inner join c.articoli a where a.ordine.id=?1",Categoria.class).setParameter(1, ordine.getId()).getResultList();
 	}
 }

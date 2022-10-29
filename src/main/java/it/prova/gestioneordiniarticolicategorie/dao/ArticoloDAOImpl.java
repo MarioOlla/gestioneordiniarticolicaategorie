@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import it.prova.gestioneordiniarticolicategorie.model.Articolo;
+import it.prova.gestioneordiniarticolicategorie.model.Categoria;
 
 public class ArticoloDAOImpl implements ArticoloDAO {
 
@@ -60,6 +61,13 @@ public class ArticoloDAOImpl implements ArticoloDAO {
 			throw new Exception("Impossibile eseguire ricerca. Input non valido");
 		return entityManager.createQuery("from Articolo a left join fetch a.categorie where a.id=?1", Articolo.class)
 				.setParameter(1, id).getResultStream().findFirst().orElse(null);
+	}
+	
+	@Override
+	public Long totalePrezzoArticoliDiCategoria(Categoria categoria)throws Exception{
+		if(categoria == null || categoria.getId() == null || categoria.getId() < 1)
+			throw new Exception("Impossibile effettuare la ricerca, input non valido");
+		return entityManager.createQuery("select sum(a.prezzoSingolo) from Categoria c left join c.articoli a where c.id=?1",Long.class).setParameter(1, categoria.getId()).getResultStream().findFirst().orElse(null);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import it.prova.gestioneordiniarticolicategorie.model.Articolo;
+import it.prova.gestioneordiniarticolicategorie.model.Categoria;
 import it.prova.gestioneordiniarticolicategorie.model.Ordine;
 
 public class OrdineDAOImpl implements OrdineDAO {
@@ -69,6 +70,18 @@ public class OrdineDAOImpl implements OrdineDAO {
 		result.setArticoli(new HashSet<>(entityManager.createQuery("from Articolo where ordine_id=?1", Articolo.class)
 				.setParameter(1, id).getResultList()));
 		return result;
+	}
+	
+	@Override
+	public List<Ordine> getAllOrdiniConArticoliDiCategoria(Categoria categoria) throws Exception{
+		if(categoria == null || categoria.getId() == null || categoria.getId() < 1)
+			throw new Exception("Impossibile effettuare la ricerca, input non valido.");
+		return entityManager.createQuery("select o from Ordine o left join o.articoli a left join a.categorie c where c.id=?1" ,Ordine.class).setParameter(1, categoria.getId()).getResultList();
+	}
+	
+	@Override
+	public Ordine findOrdineSpedizionePiuRecenteConArticoliDiCategoria(Categoria categoria)throws Exception{
+		return entityManager.createQuery("select o from Ordine o inner join o.articoli a inner join a.categorie c where c.id=?1 order by o.dataSpedizione desc", Ordine.class).setParameter(1, categoria.getId()).getResultStream().findFirst().orElse(null);
 	}
 
 }

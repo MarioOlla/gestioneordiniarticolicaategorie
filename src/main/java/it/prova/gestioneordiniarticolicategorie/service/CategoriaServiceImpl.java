@@ -10,6 +10,7 @@ import it.prova.gestioneordiniarticolicategorie.dao.EntityManagerUtil;
 import it.prova.gestioneordiniarticolicategorie.exception.ArticoliAncoraCollegatiACategoriaException;
 import it.prova.gestioneordiniarticolicategorie.model.Articolo;
 import it.prova.gestioneordiniarticolicategorie.model.Categoria;
+import it.prova.gestioneordiniarticolicategorie.model.Ordine;
 
 public class CategoriaServiceImpl implements CategoriaService {
 
@@ -177,6 +178,24 @@ public class CategoriaServiceImpl implements CategoriaService {
 			EntityManagerUtil.closeEntityManager(entityManager);
 		}
 
+	}
+	
+	@Override
+	public List<Categoria> tutteCategorieDistinteNellOrdine(Ordine ordine)throws Exception{
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
+		try {
+
+			categoriaDAOInstance.setEntityManager(entityManager);
+
+			return categoriaDAOInstance.allCategorieInOrdine(ordine);
+
+		} catch (Exception e) { 
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
 	}
 
 }
