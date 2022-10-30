@@ -81,7 +81,23 @@ public class OrdineDAOImpl implements OrdineDAO {
 	
 	@Override
 	public Ordine findOrdineSpedizionePiuRecenteConArticoliDiCategoria(Categoria categoria)throws Exception{
+		if(categoria == null || categoria.getId() == null || categoria.getId() < 1)
+			throw new Exception("Impossibile effettuare la ricerca, input non valido.");
 		return entityManager.createQuery("select o from Ordine o inner join o.articoli a inner join a.categorie c where c.id=?1 order by o.dataSpedizione desc", Ordine.class).setParameter(1, categoria.getId()).getResultStream().findFirst().orElse(null);
+	}
+	
+	@Override
+	public Long getPrezzoTotaleArticoliOrdiniPer(String destinatario)throws Exception {
+		if(destinatario == null || destinatario.isBlank())
+			throw new Exception("Impossibile effettuare la ricerca, input non valido.");
+		return entityManager.createQuery("select sum(a.prezzoSingolo) from Ordine o inner join o.articoli a where o.nomeDestinatario like ?1 ", Long.class).setParameter(1, destinatario).getResultStream().findFirst().orElse(null);
+	}
+	
+	@Override
+	public List<String> allIndirizziOrdiniArticoliConNumeroSerialeCome(String porzioneDelSeriale)throws Exception{
+		if(porzioneDelSeriale == null || porzioneDelSeriale.isBlank())
+			throw new Exception("Impossibile effettuare la ricerca, input non valido.");
+		return entityManager.createQuery("select o.indirizzoSpedizione from Ordine o inner join o.articoli a where a.numeroSeriale Like ?1",String.class).setParameter(1, "%"+porzioneDelSeriale+"%").getResultList();
 	}
 
 }

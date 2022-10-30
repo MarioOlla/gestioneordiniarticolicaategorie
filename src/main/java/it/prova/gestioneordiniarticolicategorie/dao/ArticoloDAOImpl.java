@@ -62,12 +62,22 @@ public class ArticoloDAOImpl implements ArticoloDAO {
 		return entityManager.createQuery("from Articolo a left join fetch a.categorie where a.id=?1", Articolo.class)
 				.setParameter(1, id).getResultStream().findFirst().orElse(null);
 	}
-	
+
 	@Override
-	public Long totalePrezzoArticoliDiCategoria(Categoria categoria)throws Exception{
-		if(categoria == null || categoria.getId() == null || categoria.getId() < 1)
+	public Long totalePrezzoArticoliDiCategoria(Categoria categoria) throws Exception {
+		if (categoria == null || categoria.getId() == null || categoria.getId() < 1)
 			throw new Exception("Impossibile effettuare la ricerca, input non valido");
-		return entityManager.createQuery("select sum(a.prezzoSingolo) from Categoria c left join c.articoli a where c.id=?1",Long.class).setParameter(1, categoria.getId()).getResultStream().findFirst().orElse(null);
+		return entityManager
+				.createQuery("select sum(a.prezzoSingolo) from Categoria c left join c.articoli a where c.id=?1",
+						Long.class)
+				.setParameter(1, categoria.getId()).getResultStream().findFirst().orElse(null);
 	}
 
+	@Override
+	public List<Articolo> allArticoliDiOrdiniConProblemi() throws Exception {
+		return entityManager
+				.createQuery("select a from Ordine o inner join o.articoli a where o.dataSpedizione > o.dataScadenza",
+						Articolo.class)
+				.getResultList();
+	}
 }

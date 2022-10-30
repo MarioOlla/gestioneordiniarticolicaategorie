@@ -178,14 +178,29 @@ public class ArticoloServiceImpl implements ArticoloService {
 			EntityManagerUtil.closeEntityManager(entityManager);
 		}
 	}
-	
+
 	@Override
-	public Long sommaPrezzoArticoliDiCategoria(Categoria categoria)throws Exception{
+	public Long sommaPrezzoArticoliDiCategoria(Categoria categoria) throws Exception {
 		EntityManager entityManager = EntityManagerUtil.getEntityManager();
 
 		try {
 			articoloDAOInstance.setEntityManager(entityManager);
 			return articoloDAOInstance.totalePrezzoArticoliDiCategoria(categoria);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
+
+	@Override
+	public List<Articolo> listaArticoliOrdiniConErrori() throws Exception {
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
+		try {
+			articoloDAOInstance.setEntityManager(entityManager);
+			return articoloDAOInstance.allArticoliDiOrdiniConProblemi();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

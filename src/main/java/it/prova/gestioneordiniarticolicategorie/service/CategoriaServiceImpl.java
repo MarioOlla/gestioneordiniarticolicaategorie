@@ -1,5 +1,6 @@
 package it.prova.gestioneordiniarticolicategorie.service;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -189,6 +190,24 @@ public class CategoriaServiceImpl implements CategoriaService {
 			categoriaDAOInstance.setEntityManager(entityManager);
 
 			return categoriaDAOInstance.allCategorieInOrdine(ordine);
+
+		} catch (Exception e) { 
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
+	
+	@Override
+	public List<String> tuttiCodiciDiCategorieDegliOrdiniDelMeseDi(Date dataDiRiferimento)throws Exception{
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
+		try {
+
+			categoriaDAOInstance.setEntityManager(entityManager);
+
+			return categoriaDAOInstance.allCodiciDiCategorieDegliOrdiniEffettuatiNelMeseDi(dataDiRiferimento);
 
 		} catch (Exception e) { 
 			e.printStackTrace();

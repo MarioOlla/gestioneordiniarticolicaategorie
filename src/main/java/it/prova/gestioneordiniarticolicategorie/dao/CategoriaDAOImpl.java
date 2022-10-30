@@ -1,5 +1,6 @@
 package it.prova.gestioneordiniarticolicategorie.dao;
 
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 
@@ -82,5 +83,10 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 			throw new Exception("Impossibile effettuare ricerca, input non valido.");
 		
 		return entityManager.createQuery("select distinct c from Categoria c inner join c.articoli a where a.ordine.id=?1",Categoria.class).setParameter(1, ordine.getId()).getResultList();
+	}
+	
+	@Override
+	public List<String> allCodiciDiCategorieDegliOrdiniEffettuatiNelMeseDi(Date dataDiRiferimento)throws Exception{
+		return entityManager.createQuery("select distinct c.codice from Ordine o inner join o.articoli a inner join a.categorie c where month(o.dataSpedizione)=month(?1) and year(o.dataSpedizione)=year(?1)", String.class).setParameter(1,new java.sql.Date(dataDiRiferimento.getTime())).getResultList();
 	}
 }

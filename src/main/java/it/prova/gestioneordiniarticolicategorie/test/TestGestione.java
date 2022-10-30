@@ -45,17 +45,25 @@ public class TestGestione {
 			testAggiungiCategoriaAdArticolo(ordineServiceInstance, categoriaServiceInstance, articoloServiceInstance);
 
 			testAggiungiArticoloACategoria(ordineServiceInstance, categoriaServiceInstance, articoloServiceInstance);
-			
+
 			stampaContenutoDB(articoloServiceInstance, categoriaServiceInstance, ordineServiceInstance);
-			
-			testTuttiOrdiniConArticoliDiCategoria(ordineServiceInstance, categoriaServiceInstance, articoloServiceInstance);
-			
-			testTutteCategorieDistinteNellOrdine(ordineServiceInstance, categoriaServiceInstance, articoloServiceInstance);
-			
+
+			testTuttiOrdiniConArticoliDiCategoria(ordineServiceInstance, categoriaServiceInstance,
+					articoloServiceInstance);
+
+			testTutteCategorieDistinteNellOrdine(ordineServiceInstance, categoriaServiceInstance,
+					articoloServiceInstance);
+
 			testSommaPrezzoArticoliDiCategoria(categoriaServiceInstance, articoloServiceInstance);
-			
+
 			testOrdinePiuRecenteConArticoliDiCategoria(categoriaServiceInstance, ordineServiceInstance);
-			
+
+			testTuttiCodiciDiCategorieDegliOrdiniDelMeseDi(categoriaServiceInstance, ordineServiceInstance);
+
+			testPrezzoTotaleArticoliOrdiniPer(ordineServiceInstance, articoloServiceInstance);
+
+			testListaIndirizziOrdiniConArticoliConNumeroSerialeCome(ordineServiceInstance, articoloServiceInstance);
+
 			stampaContenutoDB(articoloServiceInstance, categoriaServiceInstance, ordineServiceInstance);
 
 			testRimuoviArticolo(articoloServiceInstance);
@@ -69,6 +77,8 @@ public class TestGestione {
 			testRimuoviOrdine(ordineServiceInstance);
 
 			stampaContenutoDB(articoloServiceInstance, categoriaServiceInstance, ordineServiceInstance);
+
+			testListaArticoliOrdiniConErrori(articoloServiceInstance, ordineServiceInstance);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -94,7 +104,7 @@ public class TestGestione {
 		if (tuttiSuDB.isEmpty())
 			throw new RuntimeException("FAIL : non ci sono ordini DB. ");
 		String vecchioDestinatario = tuttiSuDB.get(0).getNomeDestinatario();
-		Ordine nuovo = new Ordine("Loris S", "viale Monte Rosa 16", null,
+		Ordine nuovo = new Ordine("Loris S", "viale Monte Rosa 16", new Date(),
 				new SimpleDateFormat("YYYY-MM-DD").parse("2022-12-31"));
 		nuovo.setId(tuttiSuDB.get(0).getId());
 		ordineService.aggiorna(nuovo);
@@ -264,55 +274,111 @@ public class TestGestione {
 		ordineService.rimuovi(daEliminare);
 		System.out.println("..... fine testRimuoviOrdine : PASS");
 	}
-	
-	private static void testTuttiOrdiniConArticoliDiCategoria(OrdineService ordineService, CategoriaService categoriaService, ArticoloService articoloService)throws Exception{
-		System.out.println("\n.....inizio testtuttiOrdiniConArticoliDiCategoria");
+
+	private static void testTuttiOrdiniConArticoliDiCategoria(OrdineService ordineService,
+			CategoriaService categoriaService, ArticoloService articoloService) throws Exception {
+		System.out.println("\n.....inizio testTuttiOrdiniConArticoliDiCategoria");
 		List<Articolo> tuttiArticoliSuDB = articoloService.listAll();
 		List<Categoria> tutteCategorieSuDB = categoriaService.listAll();
 		List<Ordine> tuttiOrdiniSuDB = ordineService.listAll();
-		if(tuttiOrdiniSuDB.isEmpty() || tutteCategorieSuDB.isEmpty() || tuttiArticoliSuDB.isEmpty())
+		if (tuttiOrdiniSuDB.isEmpty() || tutteCategorieSuDB.isEmpty() || tuttiArticoliSuDB.isEmpty())
 			throw new RuntimeException("FAIL : una o piu' tabelle del DB sono vuote.");
 		List<Ordine> result = ordineService.tuttiOrdiniConArticoliDiCategoria(tutteCategorieSuDB.get(0));
-		if(result.isEmpty())
+		if (result.isEmpty())
 			throw new RuntimeException("FAIL : la ricerca non ha dato i risultati attesi.");
-		System.out.println("..... fine testtuttiOrdiniConArticoliDiCategoria : PASS");
+		System.out.println("..... fine testTuttiOrdiniConArticoliDiCategoria : PASS");
 	}
-	
-	private static void testTutteCategorieDistinteNellOrdine(OrdineService ordineService, CategoriaService categoriaService, ArticoloService articoloService)throws Exception{
+
+	private static void testTutteCategorieDistinteNellOrdine(OrdineService ordineService,
+			CategoriaService categoriaService, ArticoloService articoloService) throws Exception {
 		System.out.println("\n.....inizio testTutteCategorieDistinteNellOrdine");
 		List<Articolo> tuttiArticoliSuDB = articoloService.listAll();
 		List<Categoria> tutteCategorieSuDB = categoriaService.listAll();
 		List<Ordine> tuttiOrdiniSuDB = ordineService.listAll();
-		if(tuttiOrdiniSuDB.isEmpty() || tutteCategorieSuDB.isEmpty() || tuttiArticoliSuDB.isEmpty())
+		if (tuttiOrdiniSuDB.isEmpty() || tutteCategorieSuDB.isEmpty() || tuttiArticoliSuDB.isEmpty())
 			throw new RuntimeException("FAIL : una o piu' tabelle del DB sono vuote.");
 		List<Categoria> result = categoriaService.tutteCategorieDistinteNellOrdine(tuttiOrdiniSuDB.get(0));
-		if(result.size() != 1)
+		if (result.size() != 1)
 			throw new RuntimeException("FAIL : la ricerca non ha dato i risultati attesi.");
 		System.out.println("..... fine testTutteCategorieDistinteNellOrdine : PASS");
 	}
-	
-	private static void testSommaPrezzoArticoliDiCategoria(CategoriaService categoriaService, ArticoloService articoloService) throws Exception{
+
+	private static void testSommaPrezzoArticoliDiCategoria(CategoriaService categoriaService,
+			ArticoloService articoloService) throws Exception {
 		System.out.println("\n.....inizio testSommaPrezzoArticoliDiCategoria");
 		List<Articolo> tuttiArticoliSuDB = articoloService.listAll();
 		List<Categoria> tutteCategorieSuDB = categoriaService.listAll();
-		if( tutteCategorieSuDB.isEmpty() || tuttiArticoliSuDB.isEmpty())
+		if (tutteCategorieSuDB.isEmpty() || tuttiArticoliSuDB.isEmpty())
 			throw new RuntimeException("FAIL : una o piu' tabelle del DB sono vuote.");
 		Long result = articoloService.sommaPrezzoArticoliDiCategoria(tutteCategorieSuDB.get(0));
-		if(result != 9)
+		if (result != 9)
 			throw new RuntimeException("FAIL : la somma dei prezzi non e' corretta.");
 		System.out.println("..... fine testSommaPrezzoArticoliDiCategoria : PASS");
 	}
-	
-	private static void testOrdinePiuRecenteConArticoliDiCategoria(CategoriaService categoriaService, OrdineService ordineService)throws Exception{
+
+	private static void testOrdinePiuRecenteConArticoliDiCategoria(CategoriaService categoriaService,
+			OrdineService ordineService) throws Exception {
 		System.out.println("\n.....inizio testOrdinePiuRecenteConArticoliDiCategoria");
 		List<Categoria> tutteCategorieSuDB = categoriaService.listAll();
 		List<Ordine> tuttiOrdiniSuDB = ordineService.listAll();
-		if(tuttiOrdiniSuDB.isEmpty() || tutteCategorieSuDB.isEmpty() )
+		if (tuttiOrdiniSuDB.isEmpty() || tutteCategorieSuDB.isEmpty())
 			throw new RuntimeException("FAIL : una o piu' tabelle del DB sono vuote.");
 		Ordine result = ordineService.ordinePiuRecenteConArticoliDiCategoria(tutteCategorieSuDB.get(0));
-		if(result==null)
+		if (result == null)
 			throw new RuntimeException("FAIL : la ricerca non ha dato i risultati attesi.");
 		System.out.println("..... fine testOrdinePiuRecenteConArticoliDiCategoria : PASS");
+	}
+
+	private static void testTuttiCodiciDiCategorieDegliOrdiniDelMeseDi(CategoriaService categoriaService,
+			OrdineService ordineService) throws Exception {
+		System.out.println("\n.....inizio testTuttiCodiciDiCategorieDegliOrdiniDelMeseDi");
+		List<Categoria> tutteCategorieSuDB = categoriaService.listAll();
+		List<Ordine> tuttiOrdiniSuDB = ordineService.listAll();
+		if (tuttiOrdiniSuDB.isEmpty() || tutteCategorieSuDB.isEmpty())
+			throw new RuntimeException("FAIL : una o piu' tabelle del DB sono vuote.");
+		List<String> result = categoriaService.tuttiCodiciDiCategorieDegliOrdiniDelMeseDi(new Date());
+		if (result.size() != 1)
+			throw new RuntimeException("FAIL : la ricerca non ha dato i risultati attesi.");
+		System.out.println("..... fine testTuttiCodiciDiCategorieDegliOrdiniDelMeseDi : PASS");
+	}
+
+	private static void testPrezzoTotaleArticoliOrdiniPer(OrdineService ordineService, ArticoloService articoloService)
+			throws Exception {
+		System.out.println("\n.....inizio testPrezzoTotaleArticoliOrdiniPer");
+		List<Ordine> tuttiOrdiniSuDB = ordineService.listAll();
+		if (tuttiOrdiniSuDB.isEmpty() || articoloService.listAll().isEmpty())
+			throw new RuntimeException("FAIL : una o piu' tabelle del DB sono vuote.");
+		Long result = ordineService.prezzoTotaleArticoliOrdiniPer("Loris S");
+		if (result != 9)
+			throw new RuntimeException("FAIL : la ricerca non ha dato i risultati attesi.");
+		System.out.println("..... fine testPrezzoTotaleArticoliOrdiniPer : PASS");
+	}
+
+	private static void testListaIndirizziOrdiniConArticoliConNumeroSerialeCome(OrdineService ordineService,
+			ArticoloService articoloService) throws Exception {
+		System.out.println("\n.....inizio testListaIndirizziOrdiniConArticoliConNumeroSerialeCome");
+		List<Ordine> tuttiOrdiniSuDB = ordineService.listAll();
+		if (tuttiOrdiniSuDB.isEmpty() || articoloService.listAll().isEmpty())
+			throw new RuntimeException("FAIL : una o piu' tabelle del DB sono vuote.");
+		List<String> result = ordineService.listaIndirizziOrdiniConArticoliConNumeroSerialeCome("JYY");
+		if (result.isEmpty())
+			throw new RuntimeException("FAIL : la ricerca non ha dato i risultati attesi.");
+		System.out.println("..... fine testListaIndirizziOrdiniConArticoliConNumeroSerialeCome : PASS");
+	}
+
+	private static void testListaArticoliOrdiniConErrori(ArticoloService articoloService, OrdineService ordineService)
+			throws Exception {
+		System.out.println("\n.....inizio testListaArticoliOrdiniConErrori");
+		ordineService.inserisciNuovo(
+				new Ordine("Maurizio", "viale Monte Rosa 16", new SimpleDateFormat("dd-MM-yyyy").parse("04-09-2021"),
+						new SimpleDateFormat("dd-MM-yyyy").parse("21-10-2020")));
+		Articolo nuovoArticolo = new Articolo("farina", "FRN8JNB", 4, new Date());
+		nuovoArticolo.setOrdine(ordineService.listAll().get(0));
+		articoloService.inserisciNuovo(nuovoArticolo);
+		List<Articolo> result = articoloService.listaArticoliOrdiniConErrori();
+		if (result.isEmpty())
+			throw new RuntimeException("FAIL : la ricerca non ha dato i risultati attesi.");
+		System.out.println("..... fine testListaArticoliOrdiniConErrori : PASS");
 	}
 
 	private static void stampaContenutoDB(ArticoloService articoloService, CategoriaService categoriaService,

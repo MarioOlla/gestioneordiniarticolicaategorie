@@ -1,5 +1,6 @@
 package it.prova.gestioneordiniarticolicategorie.service;
 
+import java.util.Date;
 import java.util.List;
 
 import it.prova.gestioneordiniarticolicategorie.dao.CategoriaDAO;
@@ -17,4 +18,6 @@ public interface CategoriaService extends IBaseService<Categoria> {
 	public void rimuoviArticoliDaCategoria(Categoria o)throws Exception;
 
 	public List<Categoria> tutteCategorieDistinteNellOrdine(Ordine ordine) throws Exception;
+
+	public List<String> tuttiCodiciDiCategorieDegliOrdiniDelMeseDi(Date dataDiRiferimento) throws Exception;
 }

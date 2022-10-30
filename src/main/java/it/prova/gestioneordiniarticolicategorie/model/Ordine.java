@@ -25,29 +25,29 @@ public class Ordine {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-	
+
 	@Column(name = "nomedestinatario")
 	private String nomeDestinatario;
-	
+
 	@Column(name = "indirizzospedizione")
 	private String indirizzoSpedizione;
-	
+
 	@Column(name = "dataspedizione")
 	private Date dataSpedizione;
-	
+
 	@Column(name = "datascadenza")
 	private Date dataScadenza;
-	
+
 	@CreationTimestamp
 	private LocalDateTime createDateTime;
 	@UpdateTimestamp
 	private LocalDateTime updateDateTime;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ordine")
 	private Set<Articolo> articoli = new HashSet<>();
-	
-	public Ordine(){
-		
+
+	public Ordine() {
+
 	}
 
 	public Ordine(String nomeDestinatario, String indirizzoSpedizione, Date dataSpedizione, Date dataScadenza) {
@@ -121,6 +121,5 @@ public class Ordine {
 	public void setArticoli(Set<Articolo> articoli) {
 		this.articoli = articoli;
 	}
-	
-	
+
 }

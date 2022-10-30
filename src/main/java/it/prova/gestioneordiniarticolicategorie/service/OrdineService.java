@@ -16,4 +16,8 @@ public interface OrdineService extends IBaseService<Ordine> {
 	public List<Ordine> tuttiOrdiniConArticoliDiCategoria(Categoria categoria) throws Exception;
 
 	public Ordine ordinePiuRecenteConArticoliDiCategoria(Categoria categoria) throws Exception;
+
+	public Long prezzoTotaleArticoliOrdiniPer(String destinatario) throws Exception;
+
+	public List<String> listaIndirizziOrdiniConArticoliConNumeroSerialeCome(String porzioneDelSeriale) throws Exception;
 }

@@ -168,4 +168,32 @@ public class OrdineServiceImpl implements OrdineService {
 			EntityManagerUtil.closeEntityManager(entityManager);
 		}
 	}
+	
+	@Override
+	public Long prezzoTotaleArticoliOrdiniPer(String destinatario)throws Exception{
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+		try {
+			ordineDAOInstance.setEntityManager(entityManager);
+			return ordineDAOInstance.getPrezzoTotaleArticoliOrdiniPer(destinatario);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
+	
+	@Override
+	public List<String> listaIndirizziOrdiniConArticoliConNumeroSerialeCome(String porzioneDelSeriale)throws Exception{
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+		try {
+			ordineDAOInstance.setEntityManager(entityManager);
+			return ordineDAOInstance.allIndirizziOrdiniArticoliConNumeroSerialeCome(porzioneDelSeriale);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
 }

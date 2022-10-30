@@ -1,5 +1,7 @@
 package it.prova.gestioneordiniarticolicategorie.service;
 
+import java.util.List;
+
 import it.prova.gestioneordiniarticolicategorie.dao.ArticoloDAO;
 import it.prova.gestioneordiniarticolicategorie.model.Articolo;
 import it.prova.gestioneordiniarticolicategorie.model.Categoria;
@@ -15,4 +17,6 @@ public interface ArticoloService extends IBaseService<Articolo> {
 	public void rimuoviCategorieDaArticolo(Articolo articolo) throws Exception;
 
 	public Long sommaPrezzoArticoliDiCategoria(Categoria categoria) throws Exception;
+
+	public List<Articolo> listaArticoliOrdiniConErrori() throws Exception;
 }
